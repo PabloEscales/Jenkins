@@ -13,13 +13,18 @@ pipeline {
     // }
     
     stages {
-        stage('run server') {
+        stage('Run server') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
                 sh 'npm run dev'
-                sh 'npm stop'
             }
         }
+
+        stage('Stop server') {
+            steps {
+                sh 'npm stop'
+            }
+        }    
     }
 }
