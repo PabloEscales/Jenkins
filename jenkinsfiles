@@ -16,7 +16,7 @@ pipeline {
         stage('run server') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
-                sh 'sudo npm run dev'
+                sh 'npm run dev'
             }
         }
     }
