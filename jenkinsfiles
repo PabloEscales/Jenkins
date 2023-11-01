@@ -5,27 +5,33 @@ pipeline {
         nodejs "node"
     }
 
-    // parameters {
-    //     string(name: 'container_name', defaultValue: 'pagina_web', description: 'Nombre del contenedor Docker.')
-    //     string(name: 'image_name', defaultValue: 'pagina_img', description: 'Nombre de la imagen Docker.')
-    //     string(name: 'tag_image', defaultValue: 'lts', description: 'Tag de la imagen de la página.')
-    //     string(name: 'container_port', defaultValue: '90', description: 'Puerto del contenedor.')
-    // }
-    
     stages {
         stage('Run server') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
-                sh 'npm run dev'
-                return
+
+                script {
+                    def serverProcess = bat(script: 'npm run dev', returnStatus: true)
+
+                    // Verificar si el proceso se ha iniciado correctamente (código de retorno 0)
+                    if (serverProcess == 0) {
+                        echo 'El servidor se ha iniciado exitosamente.'
+                    } else {
+                        echo 'Error al iniciar el servidor.'
+                    }
+                    
+                    // Obtener el PID del proceso de npm run dev
+                    def pid = bat(script: 'pgrep -P ${serverProcess}', returnStatus: true).trim()
+                    
+                    // Si se encontró un PID, usar el comando kill para terminar el proceso
+                    if (pid) {
+                        bat "kill -15 ${pid}"
+                    } else {
+                        echo 'No se pudo encontrar el PID del proceso.'
+                    }
+                }
             }
         }
-
-        // stage('Stop server') {
-        //     steps {
-        //         error('Detener el pipeline') // Este comando detendrá el pipeline
-        //     }
-        // }    
     }
 }
