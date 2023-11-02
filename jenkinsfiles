@@ -1,36 +1,27 @@
 pipeline {
     agent any
-
     tools {
         nodejs "node"
     }
+    // parameters {
+    //     string(name: 'container_name', defaultValue: 'pagina_web', description: 'Nombre del contenedor Docker.')
+    //     string(name: 'image_name', defaultValue: 'pagina_img', description: 'Nombre de la imagen Docker.')
+    //     string(name: 'tag_image', defaultValue: 'lts', description: 'Tag de la imagen de la página.')
+    //     string(name: 'container_port', defaultValue: '90', description: 'Puerto del contenedor.')
+    // }
     
     stages {
         stage('Run server') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
-                
-                // Verifica si el archivo de bloqueo existe
-                script {
-                    if (fileExists('server.lock')) {
-                        // Si existe, mata el proceso
-                        sh 'pkill -f "npm run dev"'
-                    }
-                }
-
-                // Inicia el servidor
                 sh 'npm run dev &'
             }
         }
-    }
 
-    post {
-        always {
-            script {
-                // Crea el archivo de bloqueo
-                writeFile file: 'server.lock', text: 'Server is running'
+        stage('Stop server') {
+            steps { 
+                sh 'echo'
             }
         }
     }
-}
