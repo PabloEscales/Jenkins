@@ -5,7 +5,19 @@ pipeline {
     }
     
     stages {
-        stage('Run server') {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageName = 'node'
+                    def imageTag = 'latest'
+                    def dockerfilePath = '/home/biyo/lab/lab1' // Ruta al Dockerfile
+
+                    sh "docker build -t ${imageName}:${imageTag} -f ${dockerfilePath} ."
+                }
+            }
+        }
+
+        stage('Run Server') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
