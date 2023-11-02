@@ -10,7 +10,7 @@ pipeline {
                 script {
                     def imageName = 'node'
                     def imageTag = 'latest'
-                    def dockerfilePath = '/home/biyo/lab/lab1' // Ruta al Dockerfile
+                    def dockerfilePath = '.' // Ruta al Dockerfile
 
                     sh "docker build -t ${imageName}:${imageTag} -f ${dockerfilePath} ."
                 }
