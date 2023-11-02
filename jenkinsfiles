@@ -5,24 +5,46 @@ pipeline {
     }
     
     stages {
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def imageName = 'node'
-                    def imageTag = 'latest'
-                    def dockerfilePath = '.' // Ruta al Dockerfile
-
-                    sh "docker build -t ${imageName}:${imageTag} -f ${dockerfilePath} ."
-                }
-            }
-        }
-
-        stage('Run Server') {
+        stage('install npm') {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
-                sh 'npm run dev'
+            }
+        }
+
+        stage('build') {
+            steps {
+                script {
+                    try {
+                        sh 'docker stop nuevito'
+                        sh 'docker rm nuevito'
+                        sh 'docker rmi node:latest'
+                        } catch (Exception e) {
+                        echo 'Exception occurred: ' + e.toString()
+                    }
+                }
+                sh 'npm run build'
+                sh 'docker build -t node:latest .'
+            }
+        }
+
+        stage('deploy') {
+            steps {
+                sh 'docker run -d -p 8091:8091 --name nuevito node:latest'
             }
         }
     }
 }
+
+
+ // stage('Build Docker Image') {
+        //     steps {
+        //         script {
+        //             def imageName = 'node'
+        //             def imageTag = 'latest'
+        //             def dockerfilePath = '.' // Ruta al Dockerfile
+
+        //             sh "docker build -t ${imageName}:${imageTag} -f ${dockerfilePath} ."
+        //         }
+        //     }
+        // }
