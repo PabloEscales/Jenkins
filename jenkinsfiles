@@ -20,7 +20,11 @@ pipeline {
                 sh 'npm run dev &'
             }
         }
+
+        stage('Stop server') {
+            steps { 
+                sh 'echo q'
+            }
+        }
     }
 }
-
-// hoal pAU
