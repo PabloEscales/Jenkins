@@ -18,11 +18,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
                 sh 'npm run dev &'
-            }
-        }
-
-        stage('Stop server') {
-            steps { 
                 sh 'q'
             }
         }
