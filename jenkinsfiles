@@ -4,13 +4,6 @@ pipeline {
     tools {
         nodejs "node"
     }
-
-    // parameters {
-    //     string(name: 'container_name', defaultValue: 'pagina_web', description: 'Nombre del contenedor Docker.')
-    //     string(name: 'image_name', defaultValue: 'pagina_img', description: 'Nombre de la imagen Docker.')
-    //     string(name: 'tag_image', defaultValue: 'lts', description: 'Tag de la imagen de la página.')
-    //     string(name: 'container_port', defaultValue: '90', description: 'Puerto del contenedor.')
-    // }
     
     stages {
         stage('Run server') {
@@ -18,6 +11,22 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
                 sh 'npm run dev &'
+            }
+        }
+    }
+    
+    post {
+        always {
+            script {
+                // Busca el proceso que escucha en el puerto 8091
+                def pid = sh(script: 'lsof -t -i :8091', returnStatus: true).trim()
+                
+                if (pid) {
+                    // Si se encontró un PID, utiliza el comando kill para detener el proceso
+                    sh "kill -15 ${pid}"
+                } else {
+                    echo 'No se encontró un proceso en el puerto 8091.'
+                }
             }
         }
     }
