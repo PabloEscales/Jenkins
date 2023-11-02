@@ -18,18 +18,8 @@ pipeline {
     post {
         always {
             script {
-                // Busca el proceso que escucha en el puerto 8091
-                def pid = sh(script: 'lsof -t -i :8091', returnStatus: true).trim()
-                
-                if (pid) {
-                    // Convierte el PID a una cadena antes de usar trim
-                    def pidString = pid.toString().trim()
-                    
-                    // Utiliza el comando kill para detener el proceso
-                    sh "kill -15 ${pidString}"
-                } else {
-                    echo 'No se encontró un proceso en el puerto 8091.'
-                }
+                // Utiliza pkill para detener el proceso en el puerto 8091
+                sh 'pkill -f "npm run dev"'
             }
         }
     }
