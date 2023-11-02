@@ -17,7 +17,7 @@ pipeline {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
-                sh 'npm run dev'
+                sh 'npm run dev &'
             }
         }
 
