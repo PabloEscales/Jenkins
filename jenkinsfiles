@@ -22,8 +22,11 @@ pipeline {
                 def pid = sh(script: 'lsof -t -i :8091', returnStatus: true).trim()
                 
                 if (pid) {
-                    // Si se encontró un PID, utiliza el comando kill para detener el proceso
-                    sh "kill -15 ${pid}"
+                    // Convierte el PID a una cadena antes de usar trim
+                    def pidString = pid.toString().trim()
+                    
+                    // Utiliza el comando kill para detener el proceso
+                    sh "kill -15 ${pidString}"
                 } else {
                     echo 'No se encontró un proceso en el puerto 8091.'
                 }
