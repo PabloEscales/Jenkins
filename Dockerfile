@@ -4,7 +4,7 @@ LABEL maintainer "poel@gft.com"
 
 WORKDIR /app
 
-COPY ./jenkins-deploy/vite-project/ .
+COPY .
 
 RUN npm i
 
