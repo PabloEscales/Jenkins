@@ -21,6 +21,12 @@ pipeline {
 
                 // Inicia el servidor
                 sh 'npm run dev &'
+                
+                // Espera 30 segundos
+                sleep time: 30, unit: 'SECONDS'
+                
+                // Mata el proceso después de 30 segundos
+                sh 'pkill -f "npm run dev"'
             }
         }
     }
