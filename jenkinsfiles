@@ -1,5 +1,6 @@
 pipeline {
     agent any
+
     tools {
         nodejs "node"
     }
@@ -9,7 +10,7 @@ pipeline {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
-
+                
                 // Verifica si el archivo de bloqueo existe
                 script {
                     if (fileExists('server.lock')) {
