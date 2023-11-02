@@ -4,7 +4,7 @@ LABEL maintainer "poel@gft.com"
 
 WORKDIR /app
 
-COPY .
+COPY . .
 
 RUN npm i
 
