@@ -23,7 +23,7 @@ pipeline {
 
         stage('Stop server') {
             steps { 
-                sh 'echo q'
+                sh 'echo'
             }
         }
     }
