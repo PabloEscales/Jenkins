@@ -10,16 +10,26 @@ pipeline {
             steps { 
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
+                
+                // Verifica si el archivo de bloqueo existe
+                script {
+                    if (fileExists('server.lock')) {
+                        // Si existe, mata el proceso
+                        sh 'pkill -f "npm run dev"'
+                    }
+                }
+
+                // Inicia el servidor
                 sh 'npm run dev &'
             }
         }
     }
-    
+
     post {
         always {
             script {
-                // Utiliza pkill para detener el proceso en el puerto 8091
-                sh 'pkill -f "npm run dev"'
+                // Crea el archivo de bloqueo
+                writeFile file: 'server.lock', text: 'Server is running'
             }
         }
     }
