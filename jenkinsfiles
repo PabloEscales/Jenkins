@@ -11,14 +11,25 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/PabloEscales/Jenkins.git'
                 sh 'npm i'
 
+                // Verifica si el archivo de bloqueo existe
                 script {
-                    // Inicia el servidor en segundo plano y guarda el ID del proceso
-                    def serverProcess = sh(script: 'npm run dev & echo $!', returnStatus: true).trim()
-                    echo "Server process ID: ${serverProcess}"
-
-                    // Mata el proceso del servidor
-                    sh "kill ${serverProcess}" || error('Error al matar el proceso del servidor')
+                    if (fileExists('server.lock')) {
+                        // Si existe, mata el proceso
+                        sh 'pkill -f "npm run dev"'
+                    }
                 }
+
+                // Inicia el servidor
+                sh 'npm run dev &'
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Crea el archivo de bloqueo
+                writeFile file: 'server.lock', text: 'Server is running'
             }
         }
     }
