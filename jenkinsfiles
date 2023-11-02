@@ -17,8 +17,8 @@ pipeline {
                 script {
                     try {
                         sh 'docker stop nuevito'
-                        sh 'docker rm nuevito'
-                        sh 'docker rmi node:latest'
+                        // sh 'docker rm nuevito'
+                        // sh 'docker rmi node:latest'
                         } catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
                     }
@@ -35,16 +35,3 @@ pipeline {
         }
     }
 }
-
-
- // stage('Build Docker Image') {
-        //     steps {
-        //         script {
-        //             def imageName = 'node'
-        //             def imageTag = 'latest'
-        //             def dockerfilePath = '.' // Ruta al Dockerfile
-
-        //             sh "docker build -t ${imageName}:${imageTag} -f ${dockerfilePath} ."
-        //         }
-        //     }
-        // }
