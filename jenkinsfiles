@@ -40,7 +40,11 @@ pipeline {
                 sh "docker run -d -p ${container_port}:8091 --name ${container_name} ${image_name}:${tag_image}"
             }
         }
+
+        stage('test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
     }
 }
-
-// Auto push con pau 22222
