@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest'
 
 const aimFn = () : void => {
-  // empty fn
+  // An empty fn
 }
 
 describe('frizzbuzz', () : void => {
