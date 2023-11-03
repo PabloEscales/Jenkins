@@ -19,6 +19,12 @@ pipeline {
             }
         }
 
+        stage('test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
+
         stage('build') {
             steps {
                 script {
@@ -38,12 +44,6 @@ pipeline {
         stage('deploy') {
             steps {
                 sh "docker run -d -p ${container_port}:8091 --name ${container_name} ${image_name}:${tag_image}"
-            }
-        }
-
-        stage('test') {
-            steps {
-                sh 'npm run test'
             }
         }
     }
