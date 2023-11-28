@@ -46,5 +46,14 @@ pipeline {
                 sh "docker run -d -p ${container_port}:8091 --name ${container_name} ${image_name}:${tag_image}"
             }
         }
+        
+        stage('K8S deploy') {
+          steps {
+            script {
+                withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
+                sh ("kubectl apply -f jenkins-aks-deploy.yaml")
+                }
+            }
+        }
     }
 }
